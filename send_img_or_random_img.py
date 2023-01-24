@@ -6,7 +6,7 @@ import random
 
 def main():
 
-    test_channel_id = os.getenv('TEST_CHANNEL_ID')
+    channel_id = os.getenv('CHANNEL_ID')
     telegram_bot_token = os.getenv('TELEGRAM_BOT_TOKEN')
     bot = telegram.Bot(token=telegram_bot_token)
 
@@ -29,11 +29,11 @@ def main():
 
     if img in imgs:
         bot.send_document(
-            chat_id=test_channel_id,
+            chat_id=channel_id,
             document=open(f'images/{img}', 'rb'))
     else:
         bot.send_document(
-            chat_id=test_channel_id,
+            chat_id=channel_id,
             document=open(f'images/{random.choice(imgs)}', 'rb'))
 
 

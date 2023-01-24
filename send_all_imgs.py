@@ -7,7 +7,7 @@ import telegram
 
 def send_imgs(images):
 
-    test_channel_id = os.getenv('TEST_CHANNEL_ID')
+    channel_id = os.getenv('CHANNEL_ID')
     telegram_bot_token = os.getenv('TELEGRAM_BOT_TOKEN')
     bot = telegram.Bot(token=telegram_bot_token)
 
@@ -18,7 +18,9 @@ def send_imgs(images):
     )
     parser.add_argument(
         'count',
-        help='Введите количество картинок для отправки в телеграм канал.'
+        nargs='?',
+        help='Введите количество картинок для отправки в телеграм канал.',
+        default=1
     )
     parser.add_argument(
         'minutes',
@@ -29,16 +31,14 @@ def send_imgs(images):
     )
     args = parser.parse_args()
 
-    # number = int(input())
-
     while True:
         for index, image in enumerate(images, 1):
-            bot.send_document(chat_id=test_channel_id,
+            bot.send_document(chat_id=channel_id,
                               document=open(f'images/{image}', 'rb'))
             if index % int(args.count) == 0:
-                time.sleep(args.minutes * 60)
+                time.sleep(int(args.minutes) * 60)
             elif index == len(images):
-                time.sleep(args.minutes * 60)
+                time.sleep(int(args.minutes) * 60)
                 break
         random.shuffle(images)
         send_imgs(images)

@@ -2,32 +2,18 @@ import requests
 import os
 from urllib.parse import urlparse
 import argparse
-
-
-def download_images(urls, pathname):
-
-    if not os.path.isdir(pathname):
-        os.makedirs(pathname)
-
-    for link in urls:
-        url_parsed_name = urlparse(link).path.split('/')[-1]
-        filename = os.path.join(pathname, url_parsed_name)
-
-        response = requests.get(link)
-        response.raise_for_status()
-
-        with open(filename, 'wb') as file:
-            file.write(response.content)
+from download_tools import download_images
 
 
 def fetch_apod_urls(url, params):
 
     response = requests.get(url, params=params)
     response.raise_for_status()
+    file_json = response.json()
     urls = []
 
-    for count in range(len(response.json())):
-        urls.append(response.json()[count].get('hdurl'))
+    for index, value in enumerate(file_json):
+        urls.append(file_json[index].get('hdurl'))
     return urls
 
 
@@ -51,13 +37,14 @@ def main():
     apod_url = "https://api.nasa.gov/planetary/apod"
 
     try:
-        imgs_urls = fetch_apod_urls(apod_url, params)
+        img_urls = fetch_apod_urls(apod_url, params)
     except requests.exceptions.HTTPError:
         print("Неверно введено число картинок, проверьте ваш ввод и попробуйте еще раз.")
     else:
-        download_images(imgs_urls, pathname='images')
+        download_images(img_urls, pathname='images')
 
 
 if __name__ == "__main__":
     main()
+
 

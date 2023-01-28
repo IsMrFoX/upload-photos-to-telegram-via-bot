@@ -2,22 +2,7 @@ import requests
 import os
 from urllib.parse import urlparse
 import argparse
-
-
-def download_images(url, pathname):
-
-    if not os.path.isdir(pathname):
-        os.makedirs(pathname)
-
-    url_parsed_name = urlparse(url).path[len(urlparse(url).path)//2:]
-
-    filename = os.path.join(pathname, f'space_{url_parsed_name}')
-
-    response = requests.get(url)
-    response.raise_for_status()
-
-    with open(filename, 'wb') as file:
-        file.write(response.content)
+from download_tools import download_images
 
 
 def check_spacex_url(launch_id):
@@ -26,15 +11,14 @@ def check_spacex_url(launch_id):
 
     response = requests.get(url)
     response.raise_for_status()
+    file_json = response.json()
 
-    if response.json()['links']['flickr']['original']:
-        for link in response.json()['links']['flickr']['original']:
+    if file_json['links']['flickr']['original']:
+        for link in file_json['links']['flickr']['original']:
             download_images(link, pathname='images')
     else:
-        if response.json()['links']['patch']['small']:
-            download_images(response.json()['links']['patch']['small'], pathname='images')
-        else:
-            print('В этом запуске нет фото')
+        if file_json['links']['patch']['small']:
+            download_images(file_json['links']['patch']['small'], pathname='images')
 
 
 def main():
@@ -46,7 +30,9 @@ def main():
     )
     parser.add_argument(
             'url_id',
-            help='Введите айди запуска.'
+            nargs='?',
+            help='Введите айди запуска.',
+            default='latest'
     )
     args = parser.parse_args()
 
@@ -56,12 +42,13 @@ def main():
         print("Введен неправильный 'id' запуска, скачивание картинок происходит из последнего запуска.")
         response = requests.get(latest_launch_url)
         response.raise_for_status()
-        if response.json()['links']['flickr']['original']:
-            for link in response.json()['links']['flickr']['original']:
+        file_json = response.json()
+        if file_json['links']['flickr']['original']:
+            for link in file_json['links']['flickr']['original']:
                 download_images(link, pathname='images')
         else:
-            if response.json()['links']['patch']['small']:
-                download_images(response.json()['links']['patch']['small'], pathname='images')
+            if file_json['links']['patch']['small']:
+                download_images(file_json['links']['patch']['small'], pathname='images')
             else:
                 print('В этом запуске нет фото')
 

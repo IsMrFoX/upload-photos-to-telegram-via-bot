@@ -4,37 +4,25 @@ from urllib.parse import urlparse
 import argparse
 import datetime
 import telegram
+from download_tools import download_images
 
 
-def download_images(urls, pathname):
+def fetch_epic_url(api_token=''):
 
-    if not os.path.isdir(pathname):
-        os.makedirs(pathname)
-
-    for link in urls:
-        url_parsed_name = urlparse(link).path.split('/')[-1]
-        filename = os.path.join(pathname, url_parsed_name)
-
-        response = requests.get(link)
-        response.raise_for_status()
-
-        with open(filename, 'wb') as file:
-            file.write(response.content)
-
-
-def fetch_epic_url():
-
-    url = "https://api.nasa.gov/EPIC/api/natural/images?api_key=DEMO_KEY"
-    response = requests.get(url)
+    url = "https://api.nasa.gov/EPIC/api/natural/images"
+    params = {
+        'api_key': f'{api_token}'
+    }
+    response = requests.get(url, params=params)
     response.raise_for_status()
-
+    file_json = response.json()
     date_time = datetime.datetime.fromisoformat
     urls = []
 
-    for item in response.json():
+    for item in file_json:
         urls.append(
             f"https://api.nasa.gov/EPIC/archive/natural/"
-            f"{str(date_time(item['date']).date()).replace('-','/')}/png/{item['image']}.png?api_key=DEMO_KEY"
+            f"{str(date_time(item['date']).date()).replace('-','/')}/png/{item['image']}.png"
         )
     return urls
 
@@ -46,15 +34,27 @@ def main():
         'Программа имеет ограниченное количество запросов для скачивания картинок.'
         'После исчерпания лимита, попробуйте позже.')
 
+
+    parser.add_argument(
+        'token',
+        nargs='?',
+        help='Введите токен.',
+        default='DEMO_KEY'
+    )
     args = parser.parse_args()
 
+    url_params = {
+        'api_key': f'{args.token}'
+    }
+
     try:
-        img_urls = fetch_epic_url()
+        img_urls = fetch_epic_url(args.token)
     except requests.exceptions.HTTPError:
         print("Достигнут лимит для скачивания картинок, попробуйте позже.")
     else:
-        download_images(img_urls, pathname='images')
+        download_images(img_urls, url_params, pathname='images')
 
 
 if __name__ == "__main__":
     main()
+

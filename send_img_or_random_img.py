@@ -4,11 +4,13 @@ import telegram
 import random
 from pathlib import Path
 from download_tools import unpake_photos
+from download_tools import send_pictures
 
-def main(imgs):
 
-    tg_channel_id = os.getenv('TG_CHANNEL_ID')
-    telegram_bot_token = os.getenv('TELEGRAM_BOT_TOKEN')
+def main(images):
+
+    tg_channel_id = os.environ['TG_CHANNEL_ID']
+    telegram_bot_token = os.environ['TELEGRAM_BOT_TOKEN']
     bot = telegram.Bot(token=telegram_bot_token)
 
     parser = argparse.ArgumentParser(
@@ -19,21 +21,16 @@ def main(imgs):
             'image',
             nargs='?',
             help='Введите название картинки.',
-            default=random.choice(imgs)
+            default=random.choice(images)
     )
     args = parser.parse_args()
-    img = args.image
+    image = args.image
 
-    if img in imgs:
-        with open(Path.cwd() / 'images' / f'{img}', 'rb') as file:
-            bot.send_document(
-                chat_id=tg_channel_id,
-                document=file)
+    if image in images:
+        send_pictures(image=image, bot=bot, tg_channel_id=tg_channel_id)
+
     else:
-        with open(Path.cwd() / 'images' / f'{random.choice(imgs)}', 'rb') as file:
-            bot.send_document(
-                chat_id=tg_channel_id,
-                document=file)
+        send_pictures(image=image, bot=bot, tg_channel_id=tg_channel_id)
 
 
 if __name__ == "__main__":

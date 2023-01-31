@@ -3,6 +3,7 @@ import os
 from urllib.parse import urlparse
 import argparse
 from download_tools import download_images
+from download_tools import search_images
 
 
 def check_spacex_url(launch_id):
@@ -12,13 +13,13 @@ def check_spacex_url(launch_id):
     response = requests.get(url)
     response.raise_for_status()
     file_json = response.json()
+    orig_imgs = file_json['links']['flickr']['original']
+    small_img = file_json['links']['patch']['small']
 
-    if file_json['links']['flickr']['original']:
-        for link in file_json['links']['flickr']['original']:
-            download_images(link, pathname='images')
+    if search_images(orig_imgs=orig_imgs, small_img=small_img):
+        download_images(orig_imgs, pathname='images')
     else:
-        if file_json['links']['patch']['small']:
-            download_images(file_json['links']['patch']['small'], pathname='images')
+        download_images(small_img, pathname='images')
 
 
 def main():
@@ -43,14 +44,13 @@ def main():
         response = requests.get(latest_launch_url)
         response.raise_for_status()
         file_json = response.json()
-        if file_json['links']['flickr']['original']:
-            for link in file_json['links']['flickr']['original']:
-                download_images(link, pathname='images')
+        orig_imgs = file_json['links']['flickr']['original']
+        small_img = file_json['links']['patch']['small']
+
+        if search_images(orig_imgs=orig_imgs, small_img=small_img):
+            download_images(orig_imgs, pathname='images')
         else:
-            if file_json['links']['patch']['small']:
-                download_images(file_json['links']['patch']['small'], pathname='images')
-            else:
-                print('В этом запуске нет фото')
+            download_images(small_img, pathname='images')
 
 
 if __name__ == "__main__":

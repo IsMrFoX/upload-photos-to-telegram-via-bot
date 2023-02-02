@@ -1,6 +1,5 @@
 import requests
 import os
-from urllib.parse import urlparse
 import argparse
 from download_tools import download_images
 
@@ -12,7 +11,7 @@ def fetch_apod_urls(url, params):
     files = response.json()
 
     urls = [item['hdurl'] for item in files]
-    
+
     return urls
 
 

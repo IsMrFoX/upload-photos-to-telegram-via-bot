@@ -19,7 +19,7 @@ def fetch_apod_urls(url, params):
 
 def main():
 
-    api_token = os.environ['NASA_APOD_TOKEN']
+    api_token = os.environ['NASA_TOKEN']
     parser = argparse.ArgumentParser(
         description='Программа скачивает введенное количество картинок, либо скачивает одну картинку.'
     )

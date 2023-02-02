@@ -33,10 +33,10 @@ def main(tg_channel_id, bot, images):
         for index, image in enumerate(images, 1):
             send_pictures(image=image, bot=bot, tg_channel_id=tg_channel_id)
 
-            if index % int(args.count) == 0:
-                time.sleep(int(args.minutes) * 60)
+            if index % args.count == 0:
+                time.sleep(args.minutes * 60)
             elif index == len(images):
-                time.sleep(int(args.minutes) * 60)
+                time.sleep(args.minutes * 60)
                 break
         random.shuffle(images)
         main(images)

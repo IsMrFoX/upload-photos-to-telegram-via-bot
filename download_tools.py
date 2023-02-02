@@ -58,10 +58,10 @@ def check_spacex_url(launch_id):
 
     response = requests.get(url)
     response.raise_for_status()
-    file_json = response.json()
-    orig_imgs = file_json['links']['flickr']['original']
-    small_img = file_json['links']['patch']['small']
-
+    files = response.json()
+    orig_imgs = files['links']['flickr']['original']
+    small_img = files['links']['patch']['small']
+    
     if search_images(orig_imgs=orig_imgs, small_img=small_img):
         download_images(orig_imgs, pathname='images')
     else:

@@ -36,25 +36,21 @@ def fetch_epic_url(api_token):
 
 def main():
 
+    api_token = os.getenv('NASA_TOKEN', default='DEMO_KEY')
+
     parser = argparse.ArgumentParser(
         description='Программа скачивает последние эпик картинки планеты Земля.'
         'Программа имеет ограниченное количество запросов для скачивания картинок.'
         'После исчерпания лимита, попробуйте позже.')
 
-    parser.add_argument(
-        'token',
-        nargs='?',
-        help='Введите токен.',
-        default='DEMO_KEY'
-    )
     args = parser.parse_args()
 
     url_params = {
-        'api_key': f'{args.token}'
+        'api_key': f'{api_token}'
     }
 
     try:
-        img_urls = fetch_epic_url(args.token)
+        img_urls = fetch_epic_url(api_token)
 
     except requests.exceptions.HTTPError:
         print("Введен неверный 'api token'")

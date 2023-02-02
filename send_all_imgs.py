@@ -29,14 +29,18 @@ def main(tg_channel_id, bot, images):
     )
     args = parser.parse_args()
 
-    while True:
+       while True:
         for index, image in enumerate(images, 1):
-            send_pictures(image=image, bot=bot, tg_channel_id=tg_channel_id)
-
+            send_pictures(image, bot, tg_channel_id)
             if index % args.count == 0:
-                time.sleep(args.minutes * 60)
+                if args.time[-1] == 's':
+                    time.sleep(int(args.time[:-1]))
+                elif args.time[-1] == 'm':
+                    time.sleep(int(args.time[:-1]) * 60)
+                elif args.time[-1] == 'h':
+                    time.sleep(int(args.time[:-1]) * 3600)
             elif index == len(images):
-                time.sleep(args.minutes * 60)
+                time.sleep(args.time[:-1])
                 break
         random.shuffle(images)
         main(images)

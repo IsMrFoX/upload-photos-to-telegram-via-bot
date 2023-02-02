@@ -9,11 +9,10 @@ def fetch_apod_urls(url, params):
 
     response = requests.get(url, params=params)
     response.raise_for_status()
-    file_json = response.json()
-    urls = []
+    files = response.json()
 
-    for index, value in enumerate(file_json):
-        urls.append(file_json[index].get('hdurl'))
+    urls = [item['hdurl'] for item in files]
+    
     return urls
 
 

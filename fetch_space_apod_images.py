@@ -19,7 +19,7 @@ def fetch_apod_urls(url, params):
 
 def main():
 
-    nasa_api_apod_token = os.environ['API_TOKEN']
+    api_token = os.environ['NASA_APOD_TOKEN']
     parser = argparse.ArgumentParser(
         description='Программа скачивает введенное количество картинок, либо скачивает одну картинку.'
     )
@@ -31,7 +31,7 @@ def main():
     )
     args = parser.parse_args()
     params = {
-        'api_key': f'{nasa_api_apod_token}',
+        'api_key': f'{api_token}',
         'count': f'{args.count}'
     }
     apod_url = "https://api.nasa.gov/planetary/apod"

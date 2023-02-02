@@ -1,6 +1,7 @@
 import argparse
-import datetime
 import requests
+import os
+from datetime import datetime
 from download_tools import download_images
 
 
@@ -12,24 +13,16 @@ def fetch_epic_url(api_token):
     }
     response = requests.get(url, params=params)
     response.raise_for_status()
-    file_json = response.json()
-    date_time = datetime.datetime.fromisoformat
+    files = response.json()
     urls = []
-    image_dates = []
-    image_names = []
     part_link = "https://api.nasa.gov/EPIC/archive/natural/"
 
-    for item in file_json:
-        image_dates.append(
-            str(date_time(item['date']).date()).replace('-', '/')
-        )
-
-    for item in file_json:
-        image_names.append(item['image'])
+    image_names = [item['image'] for item in files]
+    image_dates = [datetime.fromisoformat(data['date']).date() for data in files]
 
     for index, data in enumerate(image_dates):
         urls.append(
-            f"{part_link}{data}/png/{image_names[index]}.png"
+            f"{part_link}{str(data).replace('-', '/')}/png/{image_names[index]}.png"
         )
     return urls
 

@@ -6,7 +6,6 @@ from download_tools import download_images
 
 
 def fetch_epic_url(api_token):
-
     url = "https://api.nasa.gov/EPIC/api/natural/images"
     params = {
         'api_key': f'{api_token}'
@@ -17,26 +16,26 @@ def fetch_epic_url(api_token):
     urls = []
     part_link = "https://api.nasa.gov/EPIC/archive/natural/"
 
-    image_names = [item['image'] for item in files]
-    image_dates = [datetime.fromisoformat(data['date']).date() for data in files]
+    for item in files:
+        image_names = [item['image']]
+        image_dates = [datetime.fromisoformat(item['date']).date()]
 
-    for index, data in enumerate(image_dates):
+    part_data_links = [date.strftime("%Y/%m/%d") for date in image_dates]
+
+    for data, name in zip(image_dates, image_names):
         urls.append(
-            f"{part_link}{str(data).replace('-', '/')}/png/{image_names[index]}.png"
+            f"{part_link}{part_data_links[data]}/png/{image_names[name]}.png"
         )
     return urls
 
 
 def main():
-
     api_token = os.getenv('NASA_TOKEN', default='DEMO_KEY')
 
     parser = argparse.ArgumentParser(
         description='Программа скачивает последние эпик картинки планеты Земля.'
-        'Программа имеет ограниченное количество запросов для скачивания картинок.'
-        'После исчерпания лимита, попробуйте позже.')
-
-    args = parser.parse_args()
+                    'Программа имеет ограниченное количество запросов для скачивания картинок.'
+                    'После исчерпания лимита, попробуйте позже.')
 
     url_params = {
         'api_key': f'{api_token}'

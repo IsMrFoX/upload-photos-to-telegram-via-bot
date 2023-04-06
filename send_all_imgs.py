@@ -7,10 +7,21 @@ from download_tools import unpake_photos
 from download_tools import send_pictures
 
 
-def main(images):
+def sleep(index, count, amount_time, time_value, images):
+    if index % count == 0:
+        if time_value == 's':
+            time.sleep(amount_time)
+        elif time_value == 'm':
+            time.sleep(amount_time * 60)
+        elif time_value == 'h':
+            time.sleep(amount_time * 3600)
+        elif index == len(images):
+            time.sleep(amount_time * 60)
 
-    tg_channel_id = os.getenv('TG_CHANNEL_ID')
-    telegram_bot_token = os.getenv('TELEGRAM_BOT_TOKEN')
+
+def main(images):
+    tg_channel_id = os.environ['TG_CHANNEL_ID']
+    telegram_bot_token = os.environ['TELEGRAM_BOT_TOKEN']
     bot = telegram.Bot(token=telegram_bot_token)
 
     parser = argparse.ArgumentParser(
@@ -46,26 +57,21 @@ def main(images):
     while True:
         for index, image in enumerate(images, 1):
             send_pictures(image, bot, tg_channel_id)
-            if index % args.count == 0:
-                if args.params == 's':
-                    time.sleep(args.time)
-                elif args.params == 'm':
-                    time.sleep(args.time * 60)
-                elif args.params == 'h':
-                    time.sleep(args.time * 3600)
-                else:
-                    time.sleep(args.time)
-            elif index == len(images):
-                break
+            sleep(index=index,
+                  count=args.count,
+                  amount_time=args.time,
+                  time_value=args.params,
+                  images=images
+                  )
+
         random.shuffle(images)
-        main(images)
 
 
 if __name__ == "__main__":
-    succsec = False
-    while not succsec:
+    success = False
+    while not success:
         try:
             main(unpake_photos())
-            succsec = True
+            success = True
         except telegram.error.NetworkError:
             time.sleep(10)

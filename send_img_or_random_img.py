@@ -2,7 +2,6 @@ import os
 import argparse
 import telegram
 import random
-from pathlib import Path
 from download_tools import unpake_photos
 from download_tools import send_pictures
 
@@ -30,9 +29,8 @@ def main(images):
         send_pictures(image=image, bot=bot, tg_channel_id=tg_channel_id)
 
     else:
-        send_pictures(image=image, bot=bot, tg_channel_id=tg_channel_id)
+        send_pictures(image=random.choice(images), bot=bot, tg_channel_id=tg_channel_id)
 
 
 if __name__ == "__main__":
     main(unpake_photos())
-

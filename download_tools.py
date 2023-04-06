@@ -4,7 +4,7 @@ from urllib.parse import urlparse
 from pathlib import Path
 
 
-def download_images(urls, params='', pathname='images'):
+def download_images(urls, params=None, pathname='images'):
 
     if not os.path.isdir(pathname):
         os.makedirs(pathname)
@@ -50,19 +50,3 @@ def send_pictures(image, bot, tg_channel_id):
     with open(Path.cwd() / 'images' / f'{image}', "rb") as file:
         bot.send_document(chat_id=tg_channel_id,
                           document=file)
-
-
-def check_spacex_url(launch_id):
-
-    url = f'https://api.spacexdata.com/v5/launches/{launch_id}'
-
-    response = requests.get(url)
-    response.raise_for_status()
-    files = response.json()
-    orig_imgs = files['links']['flickr']['original']
-    small_img = files['links']['patch']['small']
-    
-    if search_images(orig_imgs=orig_imgs, small_img=small_img):
-        download_images(orig_imgs, pathname='images')
-    else:
-        download_images(small_img, pathname='images')

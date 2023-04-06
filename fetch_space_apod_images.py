@@ -5,12 +5,10 @@ from download_tools import download_images
 
 
 def fetch_apod_urls(url, params):
-
     response = requests.get(url, params=params)
     response.raise_for_status()
     files = response.json()
-
-    urls = [item['hdurl'] for item in files]
+    urls = [item.get('hdurl') for item in files if item['media_type'] == 'image']
 
     return urls
 

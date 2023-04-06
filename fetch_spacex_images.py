@@ -1,6 +1,23 @@
 import requests
 import argparse
-from download_tools import check_spacex_url
+from download_tools import search_images
+from download_tools import download_images
+
+
+def download_spacex_imgs(launch_id):
+
+    url = f'https://api.spacexdata.com/v5/launches/{launch_id}'
+
+    response = requests.get(url)
+    response.raise_for_status()
+    files = response.json()
+    orig_imgs = files['links']['flickr']['original']
+    small_img = files['links']['patch']['small']
+
+    if search_images(orig_imgs=orig_imgs, small_img=small_img):
+        download_images(orig_imgs, pathname='images')
+    else:
+        download_images(small_img, pathname='images')
 
 
 def main():
@@ -17,10 +34,10 @@ def main():
     args = parser.parse_args()
 
     try:
-        check_spacex_url(args.launch_id)
+        download_spacex_imgs(args.launch_id)
     except requests.exceptions.HTTPError:
         print("Введен неправильный 'id' запуска, скачивание картинок происходит из последнего запуска.")
-        check_spacex_url(launch_id='latest')
+        download_spacex_imgs(launch_id='latest')
 
 
 if __name__ == "__main__":

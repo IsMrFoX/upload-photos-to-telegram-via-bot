@@ -18,12 +18,12 @@ def main():
     load_dotenv()
     api_token = os.environ['NASA_TOKEN']
     parser = argparse.ArgumentParser(
-        description='Программа скачивает введенное количество картинок, либо скачивает одну картинку.'
+        description='Программа скачивает введенное количество фотографий, либо скачивает одну картинку.'
     )
     parser.add_argument(
         'count',
         nargs='?',
-        help='Введите количестов картинок для скачивания.',
+        help='Введите количество фотографий для скачивания.',
         default=1
     )
     args = parser.parse_args()

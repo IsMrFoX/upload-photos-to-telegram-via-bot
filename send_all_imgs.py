@@ -44,10 +44,10 @@ def main():
     args = parser.parse_args()
 
     while True:
-        for index, image in enumerate(images, 1):
+        for index, photo in enumerate(images, 1):
             try:
                 send_photo(
-                        image,
+                        photo,
                         bot,
                         tg_channel_id,
                     )

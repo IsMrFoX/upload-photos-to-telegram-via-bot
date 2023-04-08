@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 
 def main():
-    images = unpake_photos()
+    photos = unpake_photos()
     load_dotenv()
     tg_channel_id = os.environ['TG_CHANNEL_ID']
     telegram_bot_token = os.environ['TELEGRAM_BOT_TOKEN']
@@ -19,15 +19,15 @@ def main():
                         'выложена случайная картинка из имеющихся. '
     )
     parser.add_argument(
-            'image',
+            'photo',
             nargs='?',
             help='Введите название картинки.',
-            default=random.choice(images)
+            default=random.choice(photos)
     )
     args = parser.parse_args()
 
-    image = args.image if args.image in images else random.choice(images)
-    send_photo(image=image, bot=bot, tg_channel_id=tg_channel_id)
+    photo = args.photo if args.photo in photos else random.choice(photos)
+    send_photo(photo=photo, bot=bot, tg_channel_id=tg_channel_id)
 
 
 if __name__ == "__main__":

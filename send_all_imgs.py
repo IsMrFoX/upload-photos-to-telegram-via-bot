@@ -5,6 +5,7 @@ import random
 import telegram
 from download_tools import unpake_photos
 from download_tools import send_pictures
+from dotenv import load_dotenv
 
 
 def sleep(index, count, amount_time, time_value, images):
@@ -20,6 +21,7 @@ def sleep(index, count, amount_time, time_value, images):
 
 
 def main(images):
+    load_dotenv()
     tg_channel_id = os.environ['TG_CHANNEL_ID']
     telegram_bot_token = os.environ['TELEGRAM_BOT_TOKEN']
     bot = telegram.Bot(token=telegram_bot_token)

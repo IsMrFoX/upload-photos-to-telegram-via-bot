@@ -1,7 +1,7 @@
 import requests
 import os
 from datetime import datetime
-from download_tools import download_images
+from download_tools import download_photos
 from dotenv import load_dotenv
 
 
@@ -16,12 +16,12 @@ def fetch_epic_url(api_token):
     part_link = "https://api.nasa.gov/EPIC/archive/natural/"
 
     for item in files:
-        image_names = [item['image']]
-        image_dates = [datetime.fromisoformat(item['date']).date()]
+        photos_names = [item['image']]
+        photos_dates = [datetime.fromisoformat(item['date']).date()]
 
-    part_data_links = [date.strftime("%Y/%m/%d") for date in image_dates]
+    part_data_links = [date.strftime("%Y/%m/%d") for date in photos_dates]
 
-    urls = [f"{part_link}{date}/png/{name}.png" for date, name in zip(part_data_links, image_names)]
+    urls = [f"{part_link}{date}/png/{name}.png" for date, name in zip(part_data_links, photos_names)]
 
     return urls
 
@@ -40,7 +40,7 @@ def main():
     except requests.exceptions.HTTPError:
         print("Введен неверный 'api token'")
     else:
-        download_images(img_urls, url_params, pathname='images')
+        download_photos(img_urls, url_params, pathname='photos')
 
 
 if __name__ == "__main__":

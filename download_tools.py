@@ -4,7 +4,7 @@ from urllib.parse import urlparse
 from pathlib import Path
 
 
-def download_images(urls, params=None, pathname='images'):
+def download_photos(urls, params=None, pathname='photos'):
 
     os.makedirs(pathname, exist_ok=True)
 
@@ -17,7 +17,7 @@ def download_images(urls, params=None, pathname='images'):
         save_photo(urls, params, pathname)
 
 
-def save_photo(link, params='', pathname='images'):
+def save_photo(link, params='', pathname='photos'):
 
     url_parsed_name = urlparse(link).path.split('/')[-1]
     filename = os.path.join(pathname, url_parsed_name)
@@ -30,7 +30,7 @@ def save_photo(link, params='', pathname='images'):
 
 
 def unpake_photos():
-    imgs = os.walk("images")
+    imgs = os.walk("photos")
     for items in imgs:
         imgs = items[2]
 
@@ -45,7 +45,7 @@ def has_photos(orig_imgs, small_img):
             return False
 
 
-def send_photo(image, bot, tg_channel_id):
-    with open(Path.cwd() / 'images' / f'{image}', "rb") as file:
+def send_photo(photo, bot, tg_channel_id):
+    with open(Path.cwd() / 'photos' / f'{photo}', "rb") as file:
         bot.send_document(chat_id=tg_channel_id,
                           document=file)

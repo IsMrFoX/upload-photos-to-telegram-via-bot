@@ -6,18 +6,18 @@ from pathlib import Path
 
 def download_images(urls, params=None, pathname='images'):
 
-    os.makedirs(pathname, exist_ok=False)
+    os.makedirs(pathname, exist_ok=True)
 
     if isinstance(urls, list):
         for link in urls:
             if link is not None:
-                save_images(link, params, pathname)
+                save_photo(link, params, pathname)
 
     elif isinstance(urls, str):
-        save_images(urls, params, pathname)
+        save_photo(urls, params, pathname)
 
 
-def save_images(link, params='', pathname='images'):
+def save_photo(link, params='', pathname='images'):
 
     url_parsed_name = urlparse(link).path.split('/')[-1]
     filename = os.path.join(pathname, url_parsed_name)
@@ -37,7 +37,7 @@ def unpake_photos():
     return imgs
 
 
-def search_images(orig_imgs, small_img):
+def has_photos(orig_imgs, small_img):
     if orig_imgs:
         return True
     else:
@@ -45,7 +45,7 @@ def search_images(orig_imgs, small_img):
             return False
 
 
-def send_pictures(image, bot, tg_channel_id):
+def send_photo(image, bot, tg_channel_id):
     with open(Path.cwd() / 'images' / f'{image}', "rb") as file:
         bot.send_document(chat_id=tg_channel_id,
                           document=file)

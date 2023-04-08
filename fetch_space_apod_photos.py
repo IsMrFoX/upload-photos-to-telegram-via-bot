@@ -1,7 +1,7 @@
 import requests
 import os
 import argparse
-from download_tools import download_images
+from download_tools import download_photos
 from dotenv import load_dotenv
 
 
@@ -38,7 +38,7 @@ def main():
     except requests.exceptions.HTTPError:
         print("Неверно введено число картинок, проверьте ваш ввод и попробуйте еще раз.")
     else:
-        download_images(img_urls, pathname='images')
+        download_photos(img_urls, pathname='images')
 
 
 if __name__ == "__main__":

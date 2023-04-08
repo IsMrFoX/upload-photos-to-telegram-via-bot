@@ -3,7 +3,7 @@ import requests
 import os
 from datetime import datetime
 from download_tools import download_images
-
+from dotenv import load_dotenv
 
 def fetch_epic_url(api_token):
     url = "https://api.nasa.gov/EPIC/api/natural/images"
@@ -30,6 +30,7 @@ def fetch_epic_url(api_token):
 
 
 def main():
+    load_dotenv()
     api_token = os.getenv('NASA_TOKEN', default='DEMO_KEY')
 
     parser = argparse.ArgumentParser(

@@ -2,6 +2,7 @@ import requests
 import argparse
 from download_tools import search_images
 from download_tools import download_images
+from dotenv import load_dotenv
 
 
 def download_spacex_imgs(launch_id):
@@ -21,7 +22,7 @@ def download_spacex_imgs(launch_id):
 
 
 def main():
-
+    load_dotenv()
     parser = argparse.ArgumentParser(
             description='Программа скачивает имеющиеся картинки по айди запуска.'
     )

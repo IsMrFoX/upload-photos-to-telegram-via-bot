@@ -6,8 +6,7 @@ from pathlib import Path
 
 def download_images(urls, params=None, pathname='images'):
 
-    if not os.path.isdir(pathname):
-        os.makedirs(pathname)
+    os.makedirs(pathname, exist_ok=False)
 
     if isinstance(urls, list):
         for link in urls:

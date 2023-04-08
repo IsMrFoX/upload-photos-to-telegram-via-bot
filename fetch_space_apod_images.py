@@ -2,6 +2,7 @@ import requests
 import os
 import argparse
 from download_tools import download_images
+from dotenv import load_dotenv
 
 
 def fetch_apod_urls(url, params):
@@ -14,7 +15,7 @@ def fetch_apod_urls(url, params):
 
 
 def main():
-
+    load_dotenv()
     api_token = os.environ['NASA_TOKEN']
     parser = argparse.ArgumentParser(
         description='Программа скачивает введенное количество картинок, либо скачивает одну картинку.'

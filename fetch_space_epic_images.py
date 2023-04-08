@@ -22,9 +22,9 @@ def fetch_epic_url(api_token):
 
     part_data_links = [date.strftime("%Y/%m/%d") for date in image_dates]
 
-    for data, name in zip(image_dates, image_names):
+    for data, name in zip(part_data_links, image_names):
         urls.append(
-            f"{part_link}{part_data_links[data]}/png/{image_names[name]}.png"
+            f"{part_link}{data}/png/{name}.png"
         )
     return urls
 

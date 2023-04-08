@@ -1,7 +1,7 @@
 import requests
 import argparse
 from download_tools import has_photos
-from download_tools import download_images
+from download_tools import download_photos
 from dotenv import load_dotenv
 
 
@@ -15,8 +15,8 @@ def download_spacex_imgs(launch_id):
     orig_imgs = files['links']['flickr']['original']
     small_img = files['links']['patch']['small']
 
-    (download_images(orig_imgs, pathname='images') if has_photos(orig_imgs=orig_imgs, small_img=small_img)
-     else download_images(small_img, pathname='images'))
+    (download_photos(orig_imgs, pathname='photos') if has_photos(orig_imgs=orig_imgs, small_img=small_img)
+     else download_photos(small_img, pathname='photos'))
 
 
 def main():

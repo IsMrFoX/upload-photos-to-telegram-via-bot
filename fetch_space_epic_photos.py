@@ -40,7 +40,7 @@ def main():
     except requests.exceptions.HTTPError:
         print("Введен неверный 'api token'")
     else:
-        download_photos(img_urls, url_params, pathname='photos')
+        download_photos(img_urls, url_params, pathname='images')
 
 
 if __name__ == "__main__":

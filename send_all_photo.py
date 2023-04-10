@@ -3,19 +3,14 @@ import argparse
 import time
 import random
 import telegram
-from download_tools import unpake_photos
+from download_tools import unpack_photos
 from download_tools import send_photo
 from dotenv import load_dotenv
 
 
-def sleep(index, count, amount_time):
-    if index % count == 0:
-        time.sleep(amount_time * 60)
-
-
 def main():
     load_dotenv()
-    images = unpake_photos()
+    images = unpack_photos()
     tg_channel_id = os.environ['TG_CHANNEL_ID']
     telegram_bot_token = os.environ['TELEGRAM_BOT_TOKEN']
     bot = telegram.Bot(token=telegram_bot_token)
@@ -42,26 +37,24 @@ def main():
     )
 
     args = parser.parse_args()
+    if args.count == 0:
+        print("Неверный ввод, нельзя выкладывать 0 фотографий")
+    else:
+        while True:
+            for index, photo in enumerate(images, 1):
+                try:
+                    send_photo(
+                            photo,
+                            bot,
+                            tg_channel_id,
+                        )
+                except telegram.error.NetworkError:
+                    time.sleep(10)
 
-    while True:
-        for index, photo in enumerate(images, 1):
-            try:
-                send_photo(
-                        photo,
-                        bot,
-                        tg_channel_id,
-                    )
-            except telegram.error.NetworkError:
-                time.sleep(10)
+                if args.count == index:
+                    time.sleep(args.time * 60)
 
-            sleep(
-                index=index,
-                count=args.count,
-                amount_time=args.time
-            )
-
-        time.sleep(args.time * 60)
-        random.shuffle(images)
+            random.shuffle(images)
 
 
 if __name__ == "__main__":

@@ -15,14 +15,14 @@ def download_spacex_imgs(launch_id):
     orig_imgs = files['links']['flickr']['original']
     small_img = files['links']['patch']['small']
 
-    (download_photos(orig_imgs, pathname='photos') if has_photos(orig_imgs=orig_imgs, small_img=small_img)
-     else download_photos(small_img, pathname='photos'))
+    (download_photos(orig_imgs, pathname='images') if has_photos(orig_imgs=orig_imgs, small_img=small_img)
+     else download_photos(small_img, pathname='images'))
 
 
 def main():
     load_dotenv()
     parser = argparse.ArgumentParser(
-            description='Программа скачивает имеющиеся картинки по айди запуска.'
+            description='Программа скачивает имеющиеся фотографии по айди запуска.'
     )
     parser.add_argument(
             'launch_id',
@@ -35,7 +35,7 @@ def main():
     try:
         download_spacex_imgs(args.launch_id)
     except requests.exceptions.HTTPError:
-        print("Введен неправильный 'id' запуска, скачивание картинок происходит из последнего запуска.")
+        print("Введен неправильный 'id' запуска, скачивание фотографий происходит из последнего запуска.")
         download_spacex_imgs(launch_id='latest')
 
 

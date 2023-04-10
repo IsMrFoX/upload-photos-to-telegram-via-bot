@@ -18,7 +18,7 @@ def main():
     load_dotenv()
     api_token = os.environ['NASA_TOKEN']
     parser = argparse.ArgumentParser(
-        description='Программа скачивает введенное количество фотографий, либо скачивает одну картинку.'
+        description='Программа скачивает введенное количество фотографий, либо скачивает одну фотографию.'
     )
     parser.add_argument(
         'count',
@@ -36,7 +36,7 @@ def main():
     try:
         img_urls = fetch_apod_urls(apod_url, params)
     except requests.exceptions.HTTPError:
-        print("Неверно введено число картинок, проверьте ваш ввод и попробуйте еще раз.")
+        print("Неверно введено число фотографий, проверьте ваш ввод и попробуйте еще раз.")
     else:
         download_photos(img_urls, pathname='images')
 
